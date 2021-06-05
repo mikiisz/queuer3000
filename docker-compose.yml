@@ -1,0 +1,7 @@
+version: "3"
+services:
+  infra:
+    container_name: infra
+    build:
+      context: ./
+      dockerfile: ./infra/Dockerfile
