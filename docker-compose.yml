@@ -5,3 +5,5 @@ services:
     build:
       context: ./
       dockerfile: ./infra/Dockerfile
+    volumes:
+      - ./infra/terraform:/apps/terraform
