@@ -7,3 +7,5 @@ services:
       dockerfile: ./infra/Dockerfile
     volumes:
       - ./infra/terraform:/apps/terraform
+      - ./infra/terragrunt.hcl:/apps/terragrunt.hcl
+      - ./.aws-credentials:/root/.aws/credentials
