@@ -53,6 +53,7 @@ resource "aws_instance" "ec2" {
 
   provisioner "remote-exec" {
     inline = [
+      "export AWS_DEFAULT_REGION=${var.region}",
       "sudo pip3 install boto3"
     ]
   }

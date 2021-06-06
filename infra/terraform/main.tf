@@ -28,6 +28,7 @@ module "queuer" {
   subnet_id = aws_default_subnet.default_subnet.id
   ec2_key = aws_key_pair.ec2_key_pair.key_name
   key_file = data.local_file.ec2_key.content
+  region = var.region
 }
 
 module "sqs_queue" {
