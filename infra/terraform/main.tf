@@ -15,6 +15,7 @@ module "security_groups" {
   source = "./security"
   name = "queuer_main_sg"
   vpc_id = aws_default_vpc.default_vpc.id
+  region = var.region
 }
 
 module "consumer" {
@@ -29,4 +30,12 @@ module "producer" {
   ec2_security_group_id = module.security_groups.sg
   subnet_id = aws_default_subnet.default_subnet.id
   ec2_key = aws_key_pair.ec2_key_pair.key_name
+}
+
+module "sqs_queue" {
+  source = "./sqs"
+}
+
+module "sns_topic" {
+  source = "./sns"
 }
