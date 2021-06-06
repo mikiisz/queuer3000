@@ -11,6 +11,10 @@ resource "aws_key_pair" "ec2_key_pair" {
   public_key = file("./access/ec2-key.pub")
 }
 
+data "local_file" "ec2_key" {
+  filename = "${path.module}/access/ec2-key"
+}
+
 module "security_groups" {
   source = "./security"
   name = "queuer_main_sg"
@@ -23,6 +27,7 @@ module "queuer" {
   ec2_security_group_id = module.security_groups.sg
   subnet_id = aws_default_subnet.default_subnet.id
   ec2_key = aws_key_pair.ec2_key_pair.key_name
+  key_file = data.local_file.ec2_key.content
 }
 
 module "sqs_queue" {

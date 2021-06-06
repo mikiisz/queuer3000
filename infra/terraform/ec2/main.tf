@@ -50,5 +50,18 @@ resource "aws_instance" "ec2" {
   key_name = var.ec2_key
 
   iam_instance_profile = aws_iam_instance_profile.ec2_profile.name
+
+  provisioner "remote-exec" {
+    inline = [
+      "sudo pip3 install boto3"
+    ]
+  }
+
+  connection {
+    type = "ssh"
+    user = "ec2-user"
+    host = self.public_dns
+    private_key = var.key_file
+  }
 }
 
