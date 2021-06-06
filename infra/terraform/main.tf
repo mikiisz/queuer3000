@@ -18,14 +18,7 @@ module "security_groups" {
   region = var.region
 }
 
-module "consumer" {
-  source = "./ec2"
-  ec2_security_group_id = module.security_groups.sg
-  subnet_id = aws_default_subnet.default_subnet.id
-  ec2_key = aws_key_pair.ec2_key_pair.key_name
-}
-
-module "producer" {
+module "queuer" {
   source = "./ec2"
   ec2_security_group_id = module.security_groups.sg
   subnet_id = aws_default_subnet.default_subnet.id
