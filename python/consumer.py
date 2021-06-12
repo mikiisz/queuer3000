@@ -3,7 +3,7 @@ import message_wrapper
 import time
 import math
 
-queue = queue_wrapper.get_queue("My-test-queue")
+queue = queue_wrapper.get_queue("testing-queue")
 
 amount = 0
 times = []
