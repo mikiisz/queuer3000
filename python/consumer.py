@@ -7,10 +7,10 @@ queue = queue_wrapper.get_queue("testing-queue")
 
 amount = 0
 times = []
-h = 10
+h = 1
 f = None
 
-for i in range(math.ceil(10000/h)):
+for i in range(math.ceil(1000/h)):
     messages = message_wrapper.receive_messages(queue, h, wait_time = 20) 
     for m in messages:
         times.append(float(time.time()) - float(m.body))
