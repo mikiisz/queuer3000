@@ -236,88 +236,9 @@ class SnsWrapper:
 
 
 def usage_demo():
-    print('-'*88)
-    print("Welcome to the Amazon Simple Notification Service (Amazon SNS) demo!")
-    print('-'*88)
-
-    logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
-
     sns_wrapper = SnsWrapper(boto3.resource('sns'))
-    topic_name = f'demo-basics-topic-{time.time_ns()}'
-
-    print(f"Creating topic {topic_name}.")
-    topic = sns_wrapper.create_topic(topic_name)
-
-    phone_number = input(
-        "Enter a phone number (in E.164 format) that can receive SMS messages: ")
-    if phone_number != '':
-        print(f"Sending an SMS message directly from SNS to {phone_number}.")
-        sns_wrapper.publish_text_message(phone_number, 'Hello from the SNS demo!')
-
-    email = input(
-        f"Enter an email address to subscribe to {topic_name} and receive "
-        f"a message: ")
-
-    if email != '':
-        print(f"Subscribing {email} to {topic_name}.")
-        email_sub = sns_wrapper.subscribe(topic, 'email', email)
-        answer = input(
-            f"Confirmation email sent to {email}. To receive SNS messages, "
-            f"follow the instructions in the email. When confirmed, press "
-            f"Enter to continue.")
-        while (email_sub.attributes['PendingConfirmation'] == 'true'
-               and answer.lower() != 's'):
-            answer = input(
-                f"Email address {email} is not confirmed. Follow the "
-                f"instructions in the email to confirm and receive SNS messages. "
-                f"Press Enter when confirmed or enter 's' to skip. ")
-            email_sub.reload()
-
-    phone_sub = None
-    if phone_number != '':
-        print(f"Subscribing {phone_number} to {topic_name}. Phone numbers do not "
-              f"require confirmation.")
-        phone_sub = sns_wrapper.subscribe(topic, 'sms', phone_number)
-
-    if phone_number != '' or email != '':
-        print(f"Publishing a multi-format message to {topic_name}. Multi-format "
-              f"messages contain different messages for different kinds of endpoints.")
-        sns_wrapper.publish_multi_message(
-            topic, 'SNS multi-format demo',
-            'This is the default message.',
-            'This is the SMS version of the message.',
-            'This is the email version of the message.')
-
-    if phone_sub is not None:
-        mobile_key = 'mobile'
-        friendly = 'friendly'
-        print(f"Adding a filter policy to the {phone_number} subscription to send "
-              f"only messages with a '{mobile_key}' attribute of '{friendly}'.")
-        sns_wrapper.add_subscription_filter(phone_sub, {mobile_key: friendly})
-        print(f"Publishing a message with a {mobile_key}: {friendly} attribute.")
-        sns_wrapper.publish_message(
-            topic, "Hello! This message is mobile friendly.", {mobile_key: friendly})
-        not_friendly = 'not-friendly'
-        print(f"Publishing a message with a {mobile_key}: {not_friendly} attribute.")
-        sns_wrapper.publish_message(
-            topic,
-            "Hey. This message is not mobile friendly, so you shouldn't get "
-            "it on your phone.",
-            {mobile_key: not_friendly})
-
-    print(f"Getting subscriptions to {topic_name}.")
-    topic_subs = sns_wrapper.list_subscriptions(topic)
-    for sub in topic_subs:
-        print(f"{sub.arn}")
-
-    print(f"Deleting subscriptions and {topic_name}.")
-    for sub in topic_subs:
-        if sub.arn != 'PendingConfirmation':
-            sns_wrapper.delete_subscription(sub)
-    sns_wrapper.delete_topic(topic)
-
-    print("Thanks for watching!")
-    print('-'*88)
+    topic = sns_wrapper.list_topics()[0]
+    sns_wrapper.publish_message(topic, str(time.time()))
 
 
 if __name__ == '__main__':
